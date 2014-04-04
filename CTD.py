@@ -5,6 +5,7 @@ import sys
 import glob
 import re
 import csv
+import pycurl
 from py2neo import node, rel, neo4j, geoff
 
 def infiles_check_gene():
@@ -16,9 +17,9 @@ def infiles_check_gene():
 	for row in genesf:
 		geneval = "(" + row[2]+ " {\"geneid\":\"" + row[2] + "\" , \"GeneSymbol\":\"" + row[0] + \
 			 "\" ,\"GeneName\":\"" + row[1] + "\" ,\"AltGeneIDs\":\"" + row[3] + "\" , \"Synonyms\":\"" + row[4] + \
-			 "\" , \"BioGRIDIDs\":\"" + row[5] + "\" , \"PharmGKBIDs\":\"" + row[6] + "\" , \"UniprotIDs \":\"" + row[7] + "\" })"
+			 "\" , \"BioGRIDIDs\":\"" + row[5] + "\" , \"PharmGKBIDs\":\"" + row[6] + "\" , \"UniprotIDs \":\"" + row[7] + "\" }) \n "
 		geneval = unicode(geneval, errors='ignore')		
-		geofile.write(geofile)
+		geofile.write(geneval)
 	geofile.close()
 	genes_file.close()
 
@@ -34,7 +35,7 @@ def infiles_check_chem():
                 row[1] = ''.join(list)
 		chemval = "(" + row[1]+ " {\"ChemicalID\":\"" + row[1] + "\" , \"ChemicalName\":\"" + row[0] + \
 			 "\" ,\"CasRN\":\"" + row[2] + "\" ,\"Definition\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
-			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"DrugBankIDs\":\"" + row[8] + "\" })"
+			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"DrugBankIDs\":\"" + row[8] + "\" })\n"
 		chemval = unicode(chemval, errors='ignore')		
 		geofile.write(chemval)
 	geofile.close()
@@ -50,7 +51,7 @@ def infiles_check_path():
 		list=[]
                 list = row[1].split(':')
                 row[1] = ''.join(list)
-		pathval = "(" + row[1]+ " {\"PathwayID\":\"" + row[1] + "\" , \"PathwayName\":\"" + row[0] + "\" })"		
+		pathval = "(" + row[1]+ " {\"PathwayID\":\"" + row[1] + "\" , \"PathwayName\":\"" + row[0] + "\" })\n"		
 		pathval = unicode(pathval, errors='ignore')		
 		geofile.write(pathval)
 	geofile.close()
@@ -68,13 +69,13 @@ def infiles_check_dis():
                 row[1] = ''.join(list)
 		disval = "(" + row[1]+ " {\"DiseaseID\":\"" + row[1] + "\" , \"DiseaseName\":\"" + row[0] + \
 			 "\" ,\"Definition\":\"" + row[2] + "\" ,\"AltDiseaseIDs\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
-			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"SlimMappings\":\"" + row[8] + "\" })"		
+			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"SlimMappings\":\"" + row[8] + "\" })\n"		
 		disval = unicode(disval, errors='ignore')
 		geofile.write(disval)
 	geofile.close()
-	disval_file.close()		
+	dis_file.close()		
 '''
-def load_graph_db():
+def load_graph_db_pycurl():
 	curl -X 
 '''
 
