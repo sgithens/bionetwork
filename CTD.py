@@ -29,6 +29,9 @@ def infiles_check_chem():
 	chem_file= open('CTD_chemicals.csv','rb')
 	chemsf = csv.reader(chem_file, delimiter=',', quotechar='"')
 	for row in chemsf:
+		list=[]
+                list = row[1].split(':')
+                row[1] = ''.join(list)
 		chemval = "(" + row[1]+ " {\"ChemicalID\":\"" + row[1] + "\" , \"ChemicalName\":\"" + row[0] + \
 			 "\" ,\"CasRN\":\"" + row[2] + "\" ,\"Definition\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
 			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"DrugBankIDs\":\"" + row[8] + "\" })"
@@ -44,6 +47,9 @@ def infiles_check_path():
 	path_file= open('CTD_pathways.csv','rb')
 	pathf = csv.reader(path_file, delimiter=',', quotechar='"')
 	for row in pathf:
+		list=[]
+                list = row[1].split(':')
+                row[1] = ''.join(list)
 		pathval = "(" + row[1]+ " {\"PathwayID\":\"" + row[1] + "\" , \"PathwayName\":\"" + row[0] + "\" })"		
 		pathval = unicode(pathval, errors='ignore')		
 		geofile.write(pathval)
@@ -57,6 +63,9 @@ def infiles_check_dis():
 	dis_file= open('CTD_diseases.csv','rb')
 	disf = csv.reader(dis_file, delimiter=',', quotechar='"')
 	for row in disf:
+		list=[]
+                list = row[1].split(':')
+                row[1] = ''.join(list)
 		disval = "(" + row[1]+ " {\"DiseaseID\":\"" + row[1] + "\" , \"DiseaseName\":\"" + row[0] + \
 			 "\" ,\"Definition\":\"" + row[2] + "\" ,\"AltDiseaseIDs\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
 			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"SlimMappings\":\"" + row[8] + "\" })"		
@@ -64,11 +73,10 @@ def infiles_check_dis():
 		geofile.write(disval)
 	geofile.close()
 	disval_file.close()		
-
+'''
 def load_graph_db():
-	''' Loading the neo4j Graph Database with the Load2Neo Module from NigelSmall'''
 	curl -X 
-
+'''
 
 def main():
 	infiles_check_gene()
