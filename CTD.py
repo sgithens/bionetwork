@@ -16,7 +16,7 @@ def file_exists_geoff(file):
 def infiles_check_gene():
 	file_exists_geoff('gene.geoff')
 	geofile = open('gene.geoff', 'w')
-	genes_file= open('CTD_genes.csv','rb')
+	genes_file= open('../csv/CTD_genes.csv','rb')
 	genesf = csv.reader(genes_file, delimiter=',', quotechar='"')
 	for row in genesf:
 		row[1] = row[1].replace('"', ' ')
