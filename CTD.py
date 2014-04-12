@@ -12,7 +12,8 @@ import requests
 def file_exists_geoff(file):
 	if os.path.exists(file):
 		os.remove(file)
-	global geofile = open(file, 'w')
+	global geofile
+	geofile = open(file, 'w')
 
 def infiles_check_gene(files,csvfile):
 	file_exists_geoff(files)
@@ -34,8 +35,8 @@ def infiles_check_chem(files,csvfile):
 	chem_file= open(csvfile,'rb')
 	chemsf = csv.reader(chem_file, delimiter=',', quotechar='"')
 	for row in chemsf:
-        list = row[1].split(':')
-        uniqid = '_'.join(list)
+        	list = row[1].split(':')
+        	uniqid = '_'.join(list)
 		chemval = "(" + uniqid + ":chemical!ChemicalID {\"ChemicalID\":\"" + row[1] + "\" , \"ChemicalName\":\"" + row[0] + \
 			 "\" ,\"CasRN\":\"" + row[2] + "\" ,\"Definition\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
 			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"DrugBankIDs\":\"" + row[8] + "\" })\n"
@@ -50,8 +51,8 @@ def infiles_check_path(files,csvfile):
 	path_file= open(csvfile,'rb')
 	pathf = csv.reader(path_file, delimiter=',', quotechar='"')
 	for row in pathf:
-        list = row[1].split(':')
-        uniqid = '_'.join(list)
+        	list = row[1].split(':')
+        	uniqid = '_'.join(list)
 		pathval = "(" + uniqid + ":pathway!PathwayID {\"PathwayID\":\"" + row[1] + "\" , \"PathwayName\":\"" + row[0] + "\" })\n"		
 		uniquelist.append(['pathway',uniqid, row[1]])
 		pathval = unicode(pathval, errors='ignore')		
@@ -64,8 +65,8 @@ def infiles_check_dis(files,csvfile):
 	dis_file= open(csvfile,'rb')
 	disf = csv.reader(dis_file, delimiter=',', quotechar='"')
 	for row in disf:
-        list = row[1].split(':')
-        uniqid = '_'.join(list)
+        	list = row[1].split(':')
+        	uniqid = '_'.join(list)
 		disval = "(" + uniqid + ":disease!DiseaseID {\"DiseaseID\":\"" + row[1] + "\" , \"DiseaseName\":\"" + row[0] + \
 			 "\" ,\"Definition\":\"" + row[2] + "\" ,\"AltDiseaseIDs\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
 			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"SlimMappings\":\"" + row[8] + "\" })\n"		
@@ -93,10 +94,10 @@ def load_graph_dbfiles_pycurl():
 
 def ctdmain():
 
-	global uniquelist = []
-
-	global csv_file = ['../csv/CTD_chemicals.csv','../csv/CTD_diseases.csv','../csv/CTD_pathways.csv','../csv/CTD_genes.csv']
-	global geoff_file = ['chemical.geoff','disease.geoff','pathway.geoff','gene.geoff']
+	global uniquelist
+	uniquelist = []
+	csv_file = ['../csv/CTD_chemicals.csv','../csv/CTD_diseases.csv','../csv/CTD_pathways.csv','../csv/CTD_genes.csv']
+	geoff_file = ['chemical.geoff','disease.geoff','pathway.geoff','gene.geoff']
 	infiles_check_chem(geoff_file[0],csv_file[0])
 	infiles_check_dis(geoff_file[1],csv_file[1])
 	infiles_check_path(geoff_file[2],csv_file[2])
@@ -104,12 +105,15 @@ def ctdmain():
 
 	if os.path.exists('uniqueids_file'):
 		os.remove('uniqueids_file')
-	global uniqfile = open('uniqueids_file', 'w')
-	uniqfile.write(uniquelist)
-	'''
+	uniqfile = open('uniqueids_file', 'w')
+	
+	for items in uniquelist:
+		line = ','.join(items)
+		uniqfile.write(str(line) + '\n')
+	uniqfile.close()
+
 	for files in geoff_file:
 		load_graph_db_pycurl(files)
-	'''
 
 if __name__ == "__main__":
 	ctdmain()
