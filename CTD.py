@@ -9,9 +9,12 @@ from py2neo import node, rel, neo4j, geoff
 import json
 import requests
 
+def file_exists_geoff(file):
+	if os.path.exists(file):
+		os.remove(file)
+
 def infiles_check_gene():
-	if os.path.exists('gene.geoff'):
-		os.remove('gene.geoff')
+	file_exists_geoff('gene.geoff')
 	geofile = open('gene.geoff', 'w')
 	genes_file= open('CTD_genes.csv','rb')
 	genesf = csv.reader(genes_file, delimiter=',', quotechar='"')
@@ -26,10 +29,9 @@ def infiles_check_gene():
 	genes_file.close()
 
 def infiles_check_chem():
-	if os.path.exists('chemical.geoff'):
-		os.remove('chemical.geoff')
+	file_exists_geoff('chemical.geoff')	
 	geofile = open('chemical.geoff', 'w')	
-	chem_file= open('CTD_chemicals.csv','rb')
+	chem_file= open('../csv/CTD_chemicals.csv','rb')
 	chemsf = csv.reader(chem_file, delimiter=',', quotechar='"')
 	for row in chemsf:
 		list=[]
@@ -44,10 +46,9 @@ def infiles_check_chem():
 	chem_file.close()
 
 def infiles_check_path():
-	if os.path.exists('pathway.geoff'):
-		os.remove('pathway.geoff')
+	file_exists_geoff('pathway.geoff')	
 	geofile = open('pathway.geoff', 'w')		
-	path_file= open('CTD_pathways.csv','rb')
+	path_file= open('../csv/CTD_pathways.csv','rb')
 	pathf = csv.reader(path_file, delimiter=',', quotechar='"')
 	for row in pathf:
 		list=[]
@@ -60,10 +61,9 @@ def infiles_check_path():
 	path_file.close()		
 
 def infiles_check_dis():
-	if os.path.exists('disease.geoff'):
-		os.remove('disease.geoff')
+	file_exists_geoff('disease.geoff')	
 	geofile = open('disease.geoff', 'w')		
-	dis_file= open('CTD_diseases.csv','rb')
+	dis_file= open('../csv/CTD_diseases.csv','rb')
 	disf = csv.reader(dis_file, delimiter=',', quotechar='"')
 	for row in disf:
 		list=[]
@@ -77,25 +77,28 @@ def infiles_check_dis():
 	geofile.close()
 	dis_file.close()		
 
-def load_graph_db_pycurl():
-	geofile = open('gene.geoff', 'rb')	
+def load_graph_db_pycurl(file):
+	geofile = open(file, 'rb')	
 	readgene = geofile.readlines()
-	for i in readgene:
+	for lines in readgene:
 		url = 'http://localhost:7474/load2neo/load/geoff'
-		r = requests.post(url, data=i)
-
+		r = requests.post(url, data=lines)
+'''
 def load_graph_dbfiles_pycurl():
         geofile = open('chemical.geoff', 'rb')
         url = 'http://localhost:7474/load2neo/load/geoff'
         r = requests.post(url, data=geofile)
 	print r.status_code
+'''
 
 def main():
 	#infiles_check_gene()
 	#infiles_check_chem()
 	#infiles_check_path()
 	#infiles_check_dis()
-	#load_graph_db_pycurl()
-	load_graph_dbfiles_pycurl()
+	geoff_file = ['chemical.geoff','disease.geoff','pathway.geoff','gene.geoff']
+	for files in geoff_file:
+		load_graph_db_pycurl(files)
+
 if __name__ == "__main__":
 	main()
