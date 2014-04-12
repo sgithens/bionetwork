@@ -5,8 +5,9 @@ import sys
 import glob
 import re
 import csv
-import pycurl
 from py2neo import node, rel, neo4j, geoff
+import json
+import requests
 
 def infiles_check_gene():
 	if os.path.exists('gene.geoff'):
@@ -15,9 +16,10 @@ def infiles_check_gene():
 	genes_file= open('CTD_genes.csv','rb')
 	genesf = csv.reader(genes_file, delimiter=',', quotechar='"')
 	for row in genesf:
-		geneval = "(" + row[2]+ " {\"geneid\":\"" + row[2] + "\" , \"GeneSymbol\":\"" + row[0] + \
+		row[1] = row[1].replace('"', ' ')
+		geneval = "(" + row[2]+ ":gene!geneid {\"geneid\":\"" + row[2] + "\" , \"GeneSymbol\":\"" + row[0] + \
 			 "\" ,\"GeneName\":\"" + row[1] + "\" ,\"AltGeneIDs\":\"" + row[3] + "\" , \"Synonyms\":\"" + row[4] + \
-			 "\" , \"BioGRIDIDs\":\"" + row[5] + "\" , \"PharmGKBIDs\":\"" + row[6] + "\" , \"UniprotIDs \":\"" + row[7] + "\" }) \n "
+			 "\" , \"BioGRIDIDs\":\"" + row[5] + "\" , \"PharmGKBIDs\":\"" + row[6] + "\" , \"UniprotIDs \":\"" + row[7] + "\" })\n "
 		geneval = unicode(geneval, errors='ignore')		
 		geofile.write(geneval)
 	geofile.close()
@@ -32,8 +34,8 @@ def infiles_check_chem():
 	for row in chemsf:
 		list=[]
                 list = row[1].split(':')
-                row[1] = ''.join(list)
-		chemval = "(" + row[1]+ " {\"ChemicalID\":\"" + row[1] + "\" , \"ChemicalName\":\"" + row[0] + \
+                row[1] = '_'.join(list)
+		chemval = "(" + row[1]+ ":chemical!ChemicalID {\"ChemicalID\":\"" + row[1] + "\" , \"ChemicalName\":\"" + row[0] + \
 			 "\" ,\"CasRN\":\"" + row[2] + "\" ,\"Definition\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
 			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"DrugBankIDs\":\"" + row[8] + "\" })\n"
 		chemval = unicode(chemval, errors='ignore')		
@@ -50,8 +52,8 @@ def infiles_check_path():
 	for row in pathf:
 		list=[]
                 list = row[1].split(':')
-                row[1] = ''.join(list)
-		pathval = "(" + row[1]+ " {\"PathwayID\":\"" + row[1] + "\" , \"PathwayName\":\"" + row[0] + "\" })\n"		
+                row[1] = '_'.join(list)
+		pathval = "(" + row[1]+ ":pathway!PathwayID {\"PathwayID\":\"" + row[1] + "\" , \"PathwayName\":\"" + row[0] + "\" })\n"		
 		pathval = unicode(pathval, errors='ignore')		
 		geofile.write(pathval)
 	geofile.close()
@@ -66,24 +68,34 @@ def infiles_check_dis():
 	for row in disf:
 		list=[]
                 list = row[1].split(':')
-                row[1] = ''.join(list)
-		disval = "(" + row[1]+ " {\"DiseaseID\":\"" + row[1] + "\" , \"DiseaseName\":\"" + row[0] + \
+                row[1] = '_'.join(list)
+		disval = "(" + row[1]+ ":disease!DiseaseID {\"DiseaseID\":\"" + row[1] + "\" , \"DiseaseName\":\"" + row[0] + \
 			 "\" ,\"Definition\":\"" + row[2] + "\" ,\"AltDiseaseIDs\":\"" + row[3] + "\" , \"ParentIDs\":\"" + row[4] + \
 			 "\" , \"TreeNumbers\":\"" + row[5] + "\" , \"ParentTreeNumbers\":\"" + row[6] + "\" , \"Synonyms \":\"" + row[7] + "\" , \"SlimMappings\":\"" + row[8] + "\" })\n"		
 		disval = unicode(disval, errors='ignore')
 		geofile.write(disval)
 	geofile.close()
 	dis_file.close()		
-'''
+
 def load_graph_db_pycurl():
-	curl -X 
-'''
+	geofile = open('gene.geoff', 'rb')	
+	readgene = geofile.readlines()
+	for i in readgene:
+		url = 'http://localhost:7474/load2neo/load/geoff'
+		r = requests.post(url, data=i)
+
+def load_graph_dbfiles_pycurl():
+        geofile = open('chemical.geoff', 'rb')
+        url = 'http://localhost:7474/load2neo/load/geoff'
+        r = requests.post(url, data=geofile)
+	print r.status_code
 
 def main():
-	infiles_check_gene()
-	infiles_check_chem()
-	infiles_check_path()
-	infiles_check_dis()
-
+	#infiles_check_gene()
+	#infiles_check_chem()
+	#infiles_check_path()
+	#infiles_check_dis()
+	#load_graph_db_pycurl()
+	load_graph_dbfiles_pycurl()
 if __name__ == "__main__":
 	main()
