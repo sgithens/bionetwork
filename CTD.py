@@ -92,10 +92,10 @@ def load_graph_dbfiles_pycurl():
 '''
 
 def main():
-	#infiles_check_gene()
-	#infiles_check_chem()
-	#infiles_check_path()
-	#infiles_check_dis()
+	infiles_check_gene()
+	infiles_check_chem()
+	infiles_check_path()
+	infiles_check_dis()
 	geoff_file = ['chemical.geoff','disease.geoff','pathway.geoff','gene.geoff']
 	for files in geoff_file:
 		load_graph_db_pycurl(files)
