@@ -16,7 +16,8 @@ pathval = "(" + row[1]+ " {\"PathwayID\":\"" + row[1] + "\" , \"PathwayName\":\"
 
 (alice)-[:KNOWS {"since":1999}]->(bob)
 
-chemgeneval = "("+ row[1] +")-[:CGINTERACTS {\"Organism\":" + row[6] +", \"OrganismID\":"+ row[7] + \
+
+chemgeneval = "(MESH_"+ row[1] +")-[:CGINTERACTS {\"Organism\":" + row[6] +", \"OrganismID\":"+ row[7] + \
 			", \"Interaction\":"+ row[8] +", \"InteractionActions\":" +row[9]+ ", \"PubMedIDs\":"+ row[10] +"}]->("+ row[4] +")"
 
 chemdisval = "("+ row[1] +")-[:CDINTERACTS {\"DirectEvidence\":" + row[5] +", \"InferenceGeneSymbol\":"+ row[6] +  \
@@ -32,13 +33,4 @@ genedisval = "("+ row[1] +")-[:GDINTERACTS {\"DirectEvidence\":" + row[4] +", \"
 genepathval = "("+ row[1] +")-[:GPINTERACTS]->("+ row[3] +")"
 
 dispathval = "("+ row[1] +")-[:DPINTERACTS {\"InferenceGeneSymbol\":" + row[4] +"}]->("+ row[3] +")"
-
--rw-r--r-- 1 root root  164288989 Mar  4 10:52 CTD_chem_gene_ixns.csv
--rw-r--r-- 1 root root  290116902 Mar  4 10:50 CTD_chemicals_diseases.csv
--rw-r--r-- 1 root root   26652783 Mar  4 10:44 CTD_chem_pathways_enriched.csv
--rw-r--r-- 1 root root    8647733 Mar  4 10:44 CTD_diseases_pathways.csv
--rw-r--r-- 1 root root 2777209303 Mar  4 12:22 CTD_genes_diseases.csv
--rw-r--r-- 1 root root    3260439 Mar  4 10:44 CTD_genes_pathways.csv
-
-
 
